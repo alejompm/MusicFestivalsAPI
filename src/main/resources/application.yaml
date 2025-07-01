@@ -1,0 +1,14 @@
+spring:
+   datasource:
+      username: music_festivals
+      password: music_festivals
+      url: jdbc:mysql://localhost:3306/music_festivals
+   jpa:
+      hibernate:
+         ddl-auto: update
+      show-sql: true
+      defer-datasource-initialization: true
+      
+   sql:
+      init:
+         mode: always
