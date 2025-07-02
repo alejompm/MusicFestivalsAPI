@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import music.festival.controller.model.FestivalStage.StageFestival;
 import music.festival.entity.Artist;
 import music.festival.entity.Festival;
-import music.festival.entity.Performance;
 import music.festival.entity.Stage;
 
 @Data

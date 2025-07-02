@@ -33,7 +33,7 @@ public class FestivalController {
 	
 	@PostMapping("/")
 	@ResponseStatus(code= HttpStatus.CREATED)
-	public FestivalData insertPetStore(@RequestBody FestivalData festivalData) {
+	public FestivalData insertFestival(@RequestBody FestivalData festivalData) {
 		log.info("Creating Festival {}",festivalData); // {} is a replaceable parameter that is to be changed with contData
 	
 		
