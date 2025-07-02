@@ -1,7 +1,13 @@
 package music.festival.service;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +22,7 @@ import music.festival.dao.StageDao;
 import music.festival.entity.Artist;
 import music.festival.entity.Festival;
 import music.festival.entity.Stage;
+import pet.store.entity.PetStore;
 
 @Service
 public class FestivalService {
@@ -192,5 +199,90 @@ public class FestivalService {
 				"Artist= " + artistId + " is not a performing in the festival " + festivalId);
 		}
 	}
+
+	@Transactional(readOnly=true)
+	public List<FestivalData> retrieveAllFestivals() {
+		List<Festival> festivals=festivalDao.findAll();
+		
+		List<FestivalData> result = new LinkedList<>();
+		
+		for (Festival festival:festivals) {
+			FestivalData fest = new FestivalData(festival);
+			
+			fest.getStages().clear();
+			fest.getArtists().clear();
+			
+			result.add(fest);
+		}
+		return result;
+	}
+
+	@Transactional(readOnly=true)
+	public FestivalData retrieveFestivalById(Long festivalId) {
+
+		Festival festival = findFestivalById(festivalId);
+		return new FestivalData(festival);
+	}
+
+	@Transactional(readOnly=true)
+	public Set<FestivalStage> retrieveStages(Long festivalId) {
+		Festival festival = findFestivalById(festivalId);
+		FestivalData fest=new FestivalData(festival);
+		Set<FestivalStage> festStages = new HashSet<>();
+		
+		for (Stage stage:festival.getStages()) {
+			FestivalStage festStage = new FestivalStage(stage);
+
+			festStages.add(festStage);
+		}
+		
+		return festStages;
+
+	}
+	
+	@Transactional(readOnly=true)
+	public Set<FestivalArtist> retrieveArtistsByFestival(Long festivalId) {
+		Festival festival = findFestivalById(festivalId);
+		FestivalData fest=new FestivalData(festival);
+		Set<FestivalArtist> festArtists = new HashSet<>();
+		
+		for (Artist artist:festival.getArtists()) {
+			FestivalArtist festArtist = new FestivalArtist(artist);
+
+			festArtist.getFestivals().clear();
+			
+			festArtists.add(festArtist);
+		}
+		
+		return festArtists;
+	}
+	
+	@Transactional(readOnly=true)
+	public List<FestivalArtist> retrieveAllArtists() {
+		List<Artist> artists=artistDao.findAll();
+		
+		List<FestivalArtist> result = new LinkedList<>();
+		
+		for (Artist artist:artists) {
+			FestivalArtist festArt= new FestivalArtist(artist);
+			
+			festArt.getFestivals().clear();
+			
+			result.add(festArt);
+		}
+		return result;
+	}
+
+	public Map<String, String> deleteFestivalById(Long festivalId) {
+		Festival festival= findFestivalById(festivalId);
+		festivalDao.delete(festival);
+		Map<String,String> result = new HashMap <>();
+		 result.put("message", "Festival "+ festivalId + " has been deleted");
+		return result;
+	}
+	
+	
+	
+	
 
 }

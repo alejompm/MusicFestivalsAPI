@@ -1,7 +1,13 @@
 package music.festival.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import music.festival.controller.model.FestivalArtist;
 import music.festival.controller.model.FestivalData;
 import music.festival.controller.model.FestivalStage;
+import music.festival.entity.Festival;
 import music.festival.service.FestivalService;
 
 @RestController
@@ -91,17 +98,41 @@ public class FestivalController {
 		
 		festivalArtist.setArtistId(artistId);
 		
-		log.info("Updating artist {} for artist with ID={}",festivalArtist,artistId);
+		log.info("Updating artist {}  with ID={}",festivalArtist,artistId);
 		boolean isUpdate=true;
 	return festivalService.saveArtist(festivalId,festivalArtist,isUpdate);
 	}
+	
+	@GetMapping("/")
+	public List<FestivalData> retrieveAllFestivals(){
+		return festivalService.retrieveAllFestivals();
+	}
+	
+	@GetMapping("/{festivalId}")
+	public FestivalData retrieveFestivalById(@PathVariable Long festivalId){
+		return festivalService.retrieveFestivalById(festivalId);
+	}
+	
+	@GetMapping("/{festivalId}/stages")
+	public Set<FestivalStage> retrieveStages(@PathVariable Long festivalId){
+		return festivalService.retrieveStages(festivalId);
+	}
+	
+	@GetMapping("/{festivalId}/artists")
+	public Set<FestivalArtist> retrieveArtists(@PathVariable Long festivalId){
+		return festivalService.retrieveArtistsByFestival(festivalId);
+	}
+	
+	@GetMapping("/artists")
+	public List<FestivalArtist> retrieveAllArtists(){
+		return festivalService.retrieveAllArtists();
+	}
 
-	
-	
-
-	
-	
-	
+	@DeleteMapping("/{festivalId}")
+	public Map<String, String> deleteFestivalById(@PathVariable Long festivalId){
+		log.info("Deleting festival with ID={}",festivalId);
+		return festivalService.deleteFestivalById(festivalId);
+	}
 	
 
 }

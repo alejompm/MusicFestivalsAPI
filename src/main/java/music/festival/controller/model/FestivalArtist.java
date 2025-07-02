@@ -19,7 +19,7 @@ public class FestivalArtist {
 	private String artistEmail;
 	private String artistPhone;
 	private String artistSpecialRequirements;
-	private Set<Festival> festival = new HashSet <>();
+	//private Set<Festival> festival = new HashSet <>();
 	private Set<ArtistFestival> festivals = new HashSet <>();
 	
 	public FestivalArtist(Artist artist) {
